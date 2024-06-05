@@ -1,11 +1,15 @@
 source("src/000_setup.R")
 
-fetch_bii <- function(x, fname_bii = "bii.tif", progress = TRUE) {
-  if(!file.exists(fname_bii)) {
-    stop(sprintf("Biodiversity intactness index data needs to be downloaded manually. Link: %s",
-         "https://data.nhm.ac.uk/dataset/global-map-of-the-biodiversity-intactness-index-from-newbold-et-al-2016-science"
-         ))
-  }
+bii_file <- "raw/bii.tif"
+
+if(!file.exists(bii_data)) {
+  stop(sprintf("Biodiversity intactness index data needs to be downloaded manually and referenced in this script, so it can be found in '%s'. The dataset is available under this link: %s",
+               bii_file,
+               "https://data.nhm.ac.uk/dataset/global-map-of-the-biodiversity-intactness-index-from-newbold-et-al-2016-science"
+       ))
+}
+
+fetch_bii <- function(x, fname_bii = bii_file, progress = TRUE) {
   with_progress({
     get_resources(x, get_biodiversity_intactness_index(fname_bii))
   }, enable = progress)
