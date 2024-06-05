@@ -1,8 +1,7 @@
 source("src/000_setup.R")
 
-sr_files <- list.files(file.path(data_path, "iucn"), full.names = TRUE)
+sr_files <- list.files(path = "raw", pattern = "*_SR_*", full.names = TRUE)
 sr_types <- tools::file_path_sans_ext(tolower(basename(sr_files)))
-
 
 purrr::walk(seq_along(sr_files), function(i) {
 
