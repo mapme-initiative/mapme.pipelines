@@ -4,5 +4,7 @@
 .Ruserdata
 *.gpkg
 *.tif
+*.rds
+*.csv
 data
 output

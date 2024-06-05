@@ -15,14 +15,14 @@
   "Packages": {
     "DBI": {
       "Package": "DBI",
-      "Version": "1.2.2",
+      "Version": "1.2.3",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "164809cd72e1d5160b4cb3aa57f510fe"
+      "Hash": "065ae649b05f1ff66bb0c793107508f5"
     },
     "KernSmooth": {
       "Package": "KernSmooth",
@@ -140,6 +140,18 @@
         "R"
       ],
       "Hash": "5a295d7d963cc5035284dcdbaf334f4e"
+    },
+    "crayon": {
+      "Package": "crayon",
+      "Version": "1.5.2",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "grDevices",
+        "methods",
+        "utils"
+      ],
+      "Hash": "e8a1e41acf02548751f45c718d55aa6a"
     },
     "curl": {
       "Package": "curl",
@@ -291,6 +303,20 @@
       ],
       "Hash": "e0b3a53876554bd45879e596cdb10a52"
     },
+    "hms": {
+      "Package": "hms",
+      "Version": "1.1.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "lifecycle",
+        "methods",
+        "pkgconfig",
+        "rlang",
+        "vctrs"
+      ],
+      "Hash": "b59377caa7ed00fa41808342002138f9"
+    },
     "httr": {
       "Package": "httr",
       "Version": "1.4.7",
@@ -394,7 +420,7 @@
       "RemoteRepo": "mapme.biodiversity",
       "RemoteUsername": "mapme-initiative",
       "RemoteRef": "dev",
-      "RemoteSha": "1f285c9f03396cd537761f5da331ad41afb3a47d",
+      "RemoteSha": "6fcb828e1363f20db0388b7c008bba96023f21b8",
       "Requirements": [
         "R",
         "dplyr",
@@ -408,7 +434,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "365338ec65e3047d5b4f5b16aaa14c84"
+      "Hash": "13917dacd4cdca9a65ebec19e8ed9365"
     },
     "mapme.indicators": {
       "Package": "mapme.indicators",
@@ -492,6 +518,30 @@
       ],
       "Hash": "01f28d4278f15c76cddbea05899c5d6f"
     },
+    "prettyunits": {
+      "Package": "prettyunits",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "6b01fc98b1e86c4f705ce9dcfd2f57c7"
+    },
+    "progress": {
+      "Package": "progress",
+      "Version": "1.2.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "R6",
+        "crayon",
+        "hms",
+        "prettyunits"
+      ],
+      "Hash": "f4625e061cb2865f111b47ff163a5ca6"
+    },
     "progressr": {
       "Package": "progressr",
       "Version": "0.14.0",
@@ -557,9 +607,9 @@
     },
     "remotes": {
       "Package": "remotes",
-      "Version": "2.5.0",
+      "Version": "2.4.2.1",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "methods",
@@ -567,7 +617,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "3ee025083e66f18db6cf27b56e23e141"
+      "Hash": "63d15047eb239f95160112bcadc4fcb9"
     },
     "renv": {
       "Package": "renv",
@@ -581,14 +631,14 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.1.3",
+      "Version": "1.1.4",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "42548638fae05fd9a9b5f3f437fbbbe2"
+      "Hash": "3eec01f8b1dee337674b2e34ab1f9bc1"
     },
     "s2": {
       "Package": "s2",
@@ -604,9 +654,14 @@
     },
     "sf": {
       "Package": "sf",
-      "Version": "1.0-16",
-      "Source": "Repository",
-      "Repository": "P3M",
+      "Version": "1.0-17",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "sf",
+      "RemoteUsername": "r-spatial",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "e8cce26ee9968d3ca9082693bd139cdc49db58b5",
       "Requirements": [
         "DBI",
         "R",
@@ -623,7 +678,7 @@
         "units",
         "utils"
       ],
-      "Hash": "ad57b543f7c3fca05213ba78ff63df9b"
+      "Hash": "45e7a18ce45c1532fe3c3d1147ad21cc"
     },
     "sp": {
       "Package": "sp",
@@ -681,15 +736,20 @@
     },
     "terra": {
       "Package": "terra",
-      "Version": "1.7-78",
-      "Source": "Repository",
-      "Repository": "P3M",
+      "Version": "1.7-79",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "terra",
+      "RemoteUsername": "rspatial",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "8310595b4a036abaa6c5afe7359ee1b5573a930f",
       "Requirements": [
         "R",
         "Rcpp",
         "methods"
       ],
-      "Hash": "8f020def0792119cb98bd8f696dab22d"
+      "Hash": "27be943ea69b066574e710415b85daab"
     },
     "tibble": {
       "Package": "tibble",

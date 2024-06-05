@@ -1,30 +1,42 @@
 source("src/000_setup.R")
 
-plan(multicore(workers = min(10, ncores)))
-with_progress({
-  get_resources(aoi,
-                get_irr_carbon(),
-                get_vul_carbon(),
-                get_man_carbon()
-  )
-}, enable = TRUE)
-plan(sequential)
-
-plan(list(tweak(multisession, workers = ncores), sequential))
-with_progress({
-  timing <- system.time({
-    inds <- calc_indicators(
-      aoi,
-      calc_irr_carbon(type = "all", engine = "exactextract", stats = c("min", "mean", "median", "sd", "max")),
-      calc_vul_carbon(type = "all", engine = "exactextract", stats = c("min", "mean", "median", "sd", "max")),
-      calc_man_carbon(type = "all", engine = "exactextract", stats = c("min", "mean", "median", "sd", "max"))
+get_carbon <- function(x, progress) {
+  with_progress({
+    get_resources(x,
+                  get_irr_carbon(),
+                  get_vul_carbon(),
+                  get_man_carbon()
     )
-  })
-}, enable = TRUE)
-plan(sequential)
+  }, enable = progress)
+}
 
-warnings()
-print(timing)
+calc_carbon <- function(x, progress = TRUE,
+                         stats = c("min", "mean", "median", "sd", "max")) {
+  with_progress({
+    inds <- calc_indicators(
+      x,
+      calc_irr_carbon(type = "all", engine = "exactextract", stats = stats),
+      calc_vul_carbon(type = "all", engine = "exactextract", stats = stats),
+      calc_man_carbon(type = "all", engine = "exactextract", stats = stats)
+    )
+  }, enable = progress)
 
-saveRDS(inds, file.path(out_path, "carbon_indicators.rds"))
+  inds
 
+}
+
+timings <- run_indicator(
+  country_codes = country_codes,
+  wdpa_src = wdpa_dsn,
+  layer = layer,
+  fetch_resources = get_carbon,
+  calc_stats = calc_carbon,
+  resource_cores = 6,
+  ncores = ncores,
+  progress = progress,
+  area_threshold = 500000,
+  out_path = out_path,
+  suffix = "carbon-indicators"
+)
+
+saveRDS(timings, file.path(out_path, "carbon-timings.rds"))

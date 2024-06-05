@@ -1,22 +1,38 @@
 source("src/000_setup.R")
 
-get_resources(aoi, get_worldpop(2000:2020))
+fetch_worldpop <- function(x, progress = TRUE) {
+  get_resources(x, get_worldpop(2000:2020))
+}
 
-plan(list(tweak(multisession, workers = ncores), sequential))
-with_progress({
-  timing <- system.time({
+stats_worlpop <- function(
+    x,
+    progress = TRUE,
+    stats = c("min", "mean", "median", "sd", "max", "sum")) {
+
+  with_progress({
     inds <- calc_indicators(
       aoi,
       calc_population_count(
         engine = "exactextract",
-        stats = c("min", "mean", "median", "sd", "max", "sum"))
+        stats = stats)
     )
-  })
-}, enable = TRUE)
-plan(sequential)
+  }, enable = progress)
 
-warnings()
-print(timing)
+  inds
+}
 
-saveRDS(inds, file.path(out_path, "population_indicators.rds"))
+timings <- run_indicator(
+  country_codes = country_codes,
+  wdpa_src = wdpa_dsn,
+  layer = layer,
+  fetch_resources = fetch_dem,
+  calc_stats = stats_dem,
+  resource_cores = 10,
+  ncores = ncores,
+  progress = progress,
+  area_threshold = 500000,
+  out_path = out_path,
+  suffix = "worldpop-indicators"
+)
 
+saveRDS(timings, file.path(out_path, "worldpop-timings.rds"))

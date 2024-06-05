@@ -1,24 +1,36 @@
 source("src/000_setup.R")
 
-plan(multicore(workers = min(2, ncores)))
-with_progress({
-  get_resources(aoi, get_mcd64a1(years = 2000:2022))
-}, enable = TRUE)
-plan(sequential)
+fetch_modis <- function(x, progress = TRUE) {
+  with_progress({
+    get_resources(x, get_mcd64a1(years = 2000:2022))
+  }, enable = progress)
+}
 
-plan(list(tweak(multisession, workers = ncores), sequential))
-with_progress({
-  timing <- system.time({
-    inds <- calc_indicators(
-      aoi,
-      calc_burned_area(engine = "exactextract")
-    )
-  })
-}, enable = TRUE)
-plan(sequential)
 
-warnings()
-print(timing)
+stats_burned_area <- function(x, progress = TRUE) {
+  with_progress({
+      inds <- calc_indicators(
+        aoi,
+        calc_burned_area(engine = "exactextract")
+      )
+  }, enable = progress)
 
-saveRDS(inds, file.path(out_path, "burned_areas_indicators.rds"))
+  inds
+}
+
+timings <- run_indicator(
+  country_codes = country_codes,
+  wdpa_src = wdpa_dsn,
+  layer = layer,
+  fetch_resources = fetch_modis,
+  calc_stats = stats_burned_area,
+  resource_cores = 2,
+  ncores = ncores,
+  progress = progress,
+  area_threshold = 500000,
+  out_path = out_path,
+  suffix = "burned_area-indicators"
+)
+
+saveRDS(timings, file.path(out_path, "burned_area-timings.rds"))
 

@@ -1,25 +1,38 @@
 source("src/000_setup.R")
 
-plan(multicore(workers =  min(10, ncores)))
-with_progress({
-  get_resources(
-    aoi,
-    get_chirps(1981:2022)
-  )
-}, enable = TRUE)
-plan(sequential)
-
-with_progress({
-  timing <- system.time({
-    inds <- calc_indicators(
-      aoi,
-      calc_precipitation_chirps(years = 1981:2022, engine = "exactextract")
+fetch_chirps <- function(x, progress) {
+  with_progress({
+    get_resources(
+      x,
+      get_chirps(1981:2022)
     )
-  })
-}, enable = TRUE)
+  }, enable = progress)
+}
 
-warnings()
-print(timing)
 
-saveRDS(inds, file.path(out_path, "precipitation_indicators.rds"))
+stats_chirps <- function(x, progress) {
+  with_progress({
+      inds <- calc_indicators(
+        x,
+        calc_precipitation_chirps(years = 1981:2022, engine = "exactextract")
+      )
+  }, enable = progress)
 
+  inds
+}
+
+timings <- run_indicator(
+  country_codes = country_codes,
+  wdpa_src = wdpa_dsn,
+  layer = layer,
+  fetch_resources = fetch_chirps,
+  calc_stats = stats_chirps,
+  resource_cores = 10,
+  ncores = ncores,
+  progress = progress,
+  area_threshold = 5000000,
+  out_path = out_path,
+  suffix = "chirps-indicators"
+)
+
+saveRDS(timings, file.path(out_path, "chirps-timings.rds"))
