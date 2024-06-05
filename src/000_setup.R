@@ -10,15 +10,6 @@ library(mapme.biodiversity)
 library(mapme.indicators)
 source("src/001_funs.R")
 
-#source("src/carbon.R")
-#source("src/gfw.R")
-# source("src/chirps.R")
-# source("src/dem.R")
-# source("src/iucn.R")
-# source("src/population.R")
-# source("src/traveltime.R")
-
-
 # should be set by you
 ncores <- 18
 options(timeout = 600)
