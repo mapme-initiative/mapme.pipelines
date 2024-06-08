@@ -3,7 +3,7 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-# mapme.pipelines
+# wdpa-pipelines
 
 The codes in this repository are currently WIP. The goal of this project
 is to conduct large-scale analysis of globally distributed portfolios
