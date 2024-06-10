@@ -81,7 +81,7 @@
       "Package": "RColorBrewer",
       "Version": "1.1-3",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
@@ -102,7 +102,7 @@
       "Package": "RcppArmadillo",
       "Version": "0.12.8.4.0",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "Rcpp",
@@ -176,7 +176,7 @@
       "Package": "colorspace",
       "Version": "2.1-0",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "grDevices",
@@ -298,7 +298,7 @@
       "Package": "farver",
       "Version": "2.1.2",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Hash": "680887028577f3fa2a81e410ed0d6e42"
     },
     "furrr": {
@@ -347,7 +347,7 @@
       "Package": "ggplot2",
       "Version": "3.5.1",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "MASS",
         "R",
@@ -394,7 +394,7 @@
       "Package": "gtable",
       "Version": "0.3.5",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "cli",
@@ -459,7 +459,7 @@
       "Package": "isoband",
       "Version": "0.2.7",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "grid",
         "utils"
@@ -480,7 +480,7 @@
       "Package": "labeling",
       "Version": "0.4.3",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "graphics",
         "stats"
@@ -491,7 +491,7 @@
       "Package": "landscapemetrics",
       "Version": "2.1.2",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "Rcpp",
@@ -562,7 +562,7 @@
       "RemoteRepo": "mapme.biodiversity",
       "RemoteUsername": "mapme-initiative",
       "RemoteRef": "dev",
-      "RemoteSha": "9c3d5c58259205488cd48de1a4d7e8698c693138",
+      "RemoteSha": "93dbf9b90e03d9d381b61034a9d2c4113fd39b52",
       "Requirements": [
         "R",
         "dplyr",
@@ -576,7 +576,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "5928588ea22d78080a8ead3c3e081236"
+      "Hash": "9e4ed38461f86aa1cbc44044fa1a2694"
     },
     "mapme.indicators": {
       "Package": "mapme.indicators",
@@ -587,7 +587,7 @@
       "RemoteRepo": "mapme.indicators",
       "RemoteUsername": "mapme-initiative",
       "RemoteRef": "dev",
-      "RemoteSha": "d0bd95c27ba5cc70263838903d8d6a4014f3be68",
+      "RemoteSha": "9ed10365b19db91734eb6d0d783a7d909d42f39d",
       "Requirements": [
         "dplyr",
         "exactextractr",
@@ -599,7 +599,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "13a83049d5986eed7802dbd47e066f82"
+      "Hash": "1e269565dbbd19f27283ff337b42f908"
     },
     "mgcv": {
       "Package": "mgcv",
@@ -632,7 +632,7 @@
       "Package": "munsell",
       "Version": "0.5.1",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "colorspace",
         "methods"
@@ -840,7 +840,7 @@
       "Package": "scales",
       "Version": "1.3.0",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "R6",
@@ -1052,7 +1052,7 @@
       "Package": "viridisLite",
       "Version": "0.4.2",
       "Source": "Repository",
-      "Repository": "P3M",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
