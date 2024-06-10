@@ -2,7 +2,7 @@ filter_gpgk <- function(src, layer, isos) {
   read_sf(
     src, check_ring_dir = TRUE,
     query = sprintf(
-      "select * from '%s' where ISO3 in(%s) and MARINE in('0','1');",
+      "select * from %s where ISO3 in(%s) and MARINE in('0','1')",
       layer, isos))
 }
 

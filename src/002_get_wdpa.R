@@ -20,12 +20,14 @@ if (!spds_exists(url)) {
 
 layers <- sf::st_layers(url)
 layer <- grep("poly", layers$name, value = TRUE)
-wdpa_dsn <- file.path(data_path, gsub("gdb", "gpkg", basename(url)))
+wdpa_dsn <- file.path(data_path, gsub("gdb", "parquet", basename(url)))
 
 if (!spds_exists(wdpa_dsn)) {
   message("Fetching WDPA data...")
   sf::gdal_utils("vectortranslate", source = url, destination = wdpa_dsn,
-                options = c("-progress", "-wrapdateline",
+                options = c(layer, "-progress", "-wrapdateline",
                             "-datelineoffset", "180", "-makevalid"),
                 quiet = FALSE)
 }
+
+layer <- gsub(".parquet", "", basename(wdpa_dsn))
