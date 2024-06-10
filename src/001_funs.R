@@ -83,7 +83,7 @@ run_indicator <- function(
     is_valid <- st_is_valid(x)
     x_valid <- x[is_valid, ]
 
-    if (nrow(x) == 0) return(null_result)
+    if (nrow(x_valid) == 0) return(null_result)
 
     if (progress) {
       print(sprintf("Found %s assets...", nrow(x)))
@@ -95,8 +95,10 @@ run_indicator <- function(
 
     # fetch resources
     plan(multicore, workers = min(ncores, resource_cores))
-    fetch_resources(bboxs, progress)
+    res <- try(fetch_resources(bboxs, progress))
     plan(sequential)
+
+    if (inherits(res, "try-error")) return(null_result)
 
     inds_small <- inds_large <- NULL
 
@@ -141,7 +143,9 @@ run_indicator <- function(
       print(end-start)
     }
 
-    result <- data.frame(region = region, n = nrow(x_valid), timing = end-start)
+    diff <- end-start
+    units(diff) <- "secs"
+    result <- data.frame(region = region, n = nrow(x_valid), timing = diff)
     return(result)
 
   })
