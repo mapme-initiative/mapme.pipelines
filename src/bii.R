@@ -2,17 +2,15 @@ source("src/000_setup.R")
 
 bii_file <- "raw/lbii.asc"
 
-if(!file.exists(bii_data)) {
+if(!file.exists(bii_file)) {
   stop(sprintf("Biodiversity intactness index data needs to be downloaded manually and referenced in this script, so it can be found in '%s'. The dataset is available under this link: %s",
                bii_file,
                "https://data.nhm.ac.uk/dataset/global-map-of-the-biodiversity-intactness-index-from-newbold-et-al-2016-science"
        ))
 }
 
-fetch_bii <- function(x, fname_bii = bii_file, progress = TRUE) {
-  with_progress({
-    get_resources(x, get_biodiversity_intactness_index(fname_bii))
-  }, enable = progress)
+fetch_bii <- function(x, progress = TRUE, path = bii_file) {
+    get_resources(x, get_biodiversity_intactness_index(path = path))
 }
 
 stats_bii <- function(
