@@ -36,7 +36,7 @@ purrr::walk(seq_along(sr_files), function(i) {
     resource_cores = 10,
     ncores = ncores,
     progress = progress,
-    area_threshold = 500000,
+    area_threshold = 5000000,
     out_path = out_path,
     suffix = paste0("iucn_", sr_types[i], "-indicators")
   )
