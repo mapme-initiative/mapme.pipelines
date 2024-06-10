@@ -1,6 +1,6 @@
 source("src/000_setup.R")
 
-bii_file <- "raw/bii.tif"
+bii_file <- "raw/lbii.asc"
 
 if(!file.exists(bii_data)) {
   stop(sprintf("Biodiversity intactness index data needs to be downloaded manually and referenced in this script, so it can be found in '%s'. The dataset is available under this link: %s",
