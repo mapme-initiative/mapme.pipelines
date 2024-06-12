@@ -1,8 +1,10 @@
-remotes::install_github("mapme-initiative/mapme.biodiversity", ref = "dev", upgrade = F)
+remotes::install_github("mapme-initiative/mapme.biodiversity", upgrade = F)
 remotes::install_github("mapme-initiative/mapme.indicators", ref = "dev", upgrade = F)
 
 library(sf)
 library(terra)
+library(dplyr)
+library(purrr)
 library(future)
 library(progress)
 library(progressr)
@@ -14,10 +16,11 @@ source("src/001_funs.R")
 # should be set by you
 ncores <- 18
 options(timeout = 600)
-wdpa_ver <- "latest"
+wdpa_ver <- "Jun2024"
 data_path <- "./data"
 out_path <- "./output"
 progress <- TRUE
+by_region <- FALSE
 
 # leave untouched from here on
 handlers("progress")
