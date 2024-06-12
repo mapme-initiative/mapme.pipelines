@@ -11,7 +11,7 @@ stats_worlpop <- function(
 
   with_progress({
     inds <- calc_indicators(
-      aoi,
+      x,
       calc_population_count(
         engine = "exactextract",
         stats = stats)
@@ -25,8 +25,8 @@ timings <- run_indicator(
   country_codes = country_codes,
   wdpa_src = wdpa_dsn,
   layer = layer,
-  fetch_resources = fetch_dem,
-  calc_stats = stats_dem,
+  fetch_resources = fetch_worldpop,
+  calc_stats = stats_worlpop,
   resource_cores = 10,
   ncores = ncores,
   progress = progress,
