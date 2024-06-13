@@ -561,8 +561,8 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "mapme.biodiversity",
       "RemoteUsername": "mapme-initiative",
-      "RemoteRef": "dev",
-      "RemoteSha": "93dbf9b90e03d9d381b61034a9d2c4113fd39b52",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "0297fa5e4902f52fb09e0846518774aae381230f",
       "Requirements": [
         "R",
         "dplyr",
@@ -576,7 +576,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "9e4ed38461f86aa1cbc44044fa1a2694"
+      "Hash": "38195d3046021c2752b814141b9f46e4"
     },
     "mapme.indicators": {
       "Package": "mapme.indicators",
@@ -587,7 +587,7 @@
       "RemoteRepo": "mapme.indicators",
       "RemoteUsername": "mapme-initiative",
       "RemoteRef": "dev",
-      "RemoteSha": "9ed10365b19db91734eb6d0d783a7d909d42f39d",
+      "RemoteSha": "e78361f9e7783d1c0c6bb5d7c9bb358f81461d4a",
       "Requirements": [
         "dplyr",
         "exactextractr",
@@ -599,7 +599,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "1e269565dbbd19f27283ff337b42f908"
+      "Hash": "d80b55faf39c2a7df54152badc6f9cc8"
     },
     "mgcv": {
       "Package": "mgcv",
