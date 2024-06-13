@@ -587,7 +587,7 @@
       "RemoteRepo": "mapme.indicators",
       "RemoteUsername": "mapme-initiative",
       "RemoteRef": "dev",
-      "RemoteSha": "e78361f9e7783d1c0c6bb5d7c9bb358f81461d4a",
+      "RemoteSha": "8515fcc020a6ae3eb854ef9be09160726edcef47",
       "Requirements": [
         "dplyr",
         "exactextractr",
@@ -599,7 +599,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "d80b55faf39c2a7df54152badc6f9cc8"
+      "Hash": "acebd69bf40374d4a1cf9c4acd5e116f"
     },
     "mgcv": {
       "Package": "mgcv",
