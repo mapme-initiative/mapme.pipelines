@@ -1,45 +1,38 @@
 source("src/000_setup.R")
 
 sr_files <- list.files(path = "raw", pattern = "*_SR_*", full.names = TRUE)
-sr_types <- tools::file_path_sans_ext(tolower(basename(sr_files)))
 
-purrr::walk(seq_along(sr_files), function(i) {
+fetch_iucn <- function(x, progress = TRUE, paths = sr_files) {
+  get_resources(x, get_iucn(paths = paths))
+}
 
 
-  fetch_iucn <- function(x, progress = TRUE, path = sr_files[i]) {
-    get_resources(x, get_iucn(path = path))
-  }
-
-  stats_iucn <- function(
+stats_iucn <- function(
     x,
     progress = TRUE,
-    stats = c("min", "mean", "median", "sd", "max"),
-    variable = sr_types[i]) {
+    stats = c("min", "mean", "median", "sd", "max")) {
 
-    with_progress({
-      inds <- calc_indicators(
-        x,
-        calc_species_richness(engine = "extract",
-                              stats = stats,
-                              variable = variable))
-    }, enable = progress)
+  with_progress({
+    inds <- calc_indicators(
+      x,
+      calc_species_richness(engine = "extract",
+                            stats = stats))
+  }, enable = progress)
+  inds
+}
 
-    inds
-  }
+timings <- run_indicator(
+  country_codes = country_codes,
+  wdpa_src = wdpa_dsn,
+  layer = layer,
+  fetch_resources = fetch_iucn,
+  calc_stats = stats_iucn,
+  resource_cores = 10,
+  ncores = ncores,
+  progress = progress,
+  area_threshold = 5000000,
+  out_path = out_path,
+  suffix = "iucn-indicators"
+)
 
-  timings <- run_indicator(
-    country_codes = country_codes,
-    wdpa_src = wdpa_dsn,
-    layer = layer,
-    fetch_resources = fetch_iucn,
-    calc_stats = stats_iucn,
-    resource_cores = 10,
-    ncores = ncores,
-    progress = progress,
-    area_threshold = 5000000,
-    out_path = out_path,
-    suffix = paste0("iucn_", sr_types[i], "-indicators")
-  )
-
-  saveRDS(timings, file.path(out_path, paste0("iucn_", sr_types[i], "-timings.rds")))
-})
+saveRDS(timings, file.path(out_path, "iucn-timings.rds"))
