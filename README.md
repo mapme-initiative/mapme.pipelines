@@ -19,7 +19,7 @@ file.edit("src/000_setup")
 You can build a docker image for the project via:
 
 ```bash
-docker build -t wdpa-pipelines:latest .
+$ docker build -t wdpa-pipelines:latest .
 ```
 
 Then, to calculate e.g. forest cover and emission indicators you can issue
