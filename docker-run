@@ -1,1 +1,0 @@
-docker run -d -p 8787:8787 -e PASSWORD=supersecret -v ./:/home/rstudio/mapme.pipelines ghcr.io/mapme-initiative/mapme-spatial:latest
