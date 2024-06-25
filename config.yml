@@ -1,0 +1,9 @@
+default:
+  input: ./data/WDPA_WDOECM_Jun2024_Public.parquet
+  ncores: 12
+  data_path: ./data
+  output_path: ./output
+  progress: true
+  by_region: false
+  timeout: 600
+  overwrite: false
