@@ -20,9 +20,7 @@ stats_dem <- function(x, progress = TRUE, stats = c("min", "mean", "median", "sd
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_dem,
   calc_stats = stats_dem,
   resource_cores = 10,
@@ -30,7 +28,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 50000,
   out_path = out_path,
-  suffix = "dem-indicators"
+  suffix = "dem-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "dem-timings.rds"))

@@ -21,9 +21,7 @@ stats_gsw <- function(x, progress = TRUE) {
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = get_gsw,
   calc_stats = stats_gsw,
   resource_cores = 6,
@@ -31,7 +29,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 50000,
   out_path = out_path,
-  suffix = "gsw-indicators"
+  suffix = "gsw-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "gsw-timings.rds"))

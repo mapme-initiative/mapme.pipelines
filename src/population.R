@@ -22,9 +22,7 @@ stats_worlpop <- function(
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_worldpop,
   calc_stats = stats_worlpop,
   resource_cores = 10,
@@ -32,7 +30,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 500000,
   out_path = out_path,
-  suffix = "worldpop-indicators"
+  suffix = "worldpop-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "worldpop-timings.rds"))

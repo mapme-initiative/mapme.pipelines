@@ -19,9 +19,7 @@ stats_burned_area <- function(x, progress = TRUE) {
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_modis,
   calc_stats = stats_burned_area,
   resource_cores = 2,
@@ -29,7 +27,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 500000,
   out_path = out_path,
-  suffix = "burned_area-indicators"
+  suffix = "burned_area-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "burned_area-timings.rds"))

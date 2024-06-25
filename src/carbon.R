@@ -26,9 +26,7 @@ calc_carbon <- function(x, progress = TRUE,
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = get_carbon,
   calc_stats = calc_carbon,
   resource_cores = 6,
@@ -36,7 +34,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 500000,
   out_path = out_path,
-  suffix = "carbon-indicators"
+  suffix = "carbon-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "carbon-timings.rds"))

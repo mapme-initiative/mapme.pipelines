@@ -22,9 +22,7 @@ stats_iucn <- function(
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_iucn,
   calc_stats = stats_iucn,
   resource_cores = 10,
@@ -32,7 +30,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 5000000,
   out_path = out_path,
-  suffix = "iucn-indicators"
+  suffix = "iucn-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "iucn-timings.rds"))

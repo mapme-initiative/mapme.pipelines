@@ -1,3 +1,5 @@
+source("000_setup.R")
+
 baseurl <- "https://pp-import-production.s3-eu-west-1.amazonaws.com/WDPA_WDOECM_%s_Public.zip"
 
 latest_ver <- basename(httr::HEAD("http://wcmc.io/wdpa_current_release")$url)[[1]]
@@ -26,7 +28,10 @@ if (!spds_exists(wdpa_dsn)) {
   message("Fetching WDPA data...")
   sf::gdal_utils("vectortranslate", source = url, destination = wdpa_dsn,
                 options = c(layer, "-progress", "-wrapdateline",
-                            "-datelineoffset", "180", "-makevalid"),
+                            "-datelineoffset", "180", "-makevalid",
+                            "-oo", "GEOMETRY_ENCODING=GEOARROW",
+                            "-oo", "ROW_GROUP_SIZE=10000",
+                            "-oo", "SORT_BY_BBOX=YES"),
                 quiet = FALSE)
 }
 

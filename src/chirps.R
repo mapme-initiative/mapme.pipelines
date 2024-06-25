@@ -22,9 +22,7 @@ stats_chirps <- function(x, progress) {
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_chirps,
   calc_stats = stats_chirps,
   resource_cores = 10,
@@ -32,7 +30,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 5000000,
   out_path = out_path,
-  suffix = "chirps-indicators"
+  suffix = "chirps-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "chirps-timings.rds"))

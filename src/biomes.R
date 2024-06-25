@@ -12,9 +12,7 @@ stats_biome <- function(x, progress = TRUE) {
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_teow,
   calc_stats = stats_biome,
   resource_cores = 10,
@@ -22,7 +20,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 5000000,
   out_path = out_path,
-  suffix = "biome-indicators"
+  suffix = "biome-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "biome-timings.rds"))

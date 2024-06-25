@@ -28,9 +28,7 @@ stats_bii <- function(
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_bii,
   calc_stats = stats_bii,
   resource_cores = 10,
@@ -38,7 +36,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 50000,
   out_path = out_path,
-  suffix = "bii-indicators"
+  suffix = "bii-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "bii-timings.rds"))

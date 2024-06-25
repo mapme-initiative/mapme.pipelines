@@ -1,8 +1,8 @@
 source("src/000_setup.R")
 
-kba_file <- "raw/kba.gpkg"
+kba_file <- "raw/kbas.gpkg"
 
-if(!file.exists(kba_data)) {
+if(!file.exists(kba_file)) {
   stop(sprintf("Key Biodiversity Area data needs to be downloaded manually and referenced in this script, so it can be found in '%s'. The dataset is available under this link: %s",
                kba_file,
                "https://www.keybiodiversityareas.org/kba-data"
@@ -10,7 +10,7 @@ if(!file.exists(kba_data)) {
 }
 
 fetch_kba <- function(x, progress = TRUE) {
-  fname_kba <- "raw/kba.gpkg"
+  fname_kba <- "raw/kbas.gpkg"
   with_progress({
     get_resources(x, get_key_biodiversity_areas(fname_kba))
   }, enable = progress)
@@ -31,17 +31,16 @@ stats_kba <- function(
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = fetch_kba,
   calc_stats = stats_kba,
-  resource_cores = 10,
+  resource_cores = 1,
   ncores = ncores,
   progress = progress,
-  area_threshold = 50000,
+  area_threshold = 5000000,
   out_path = out_path,
-  suffix = "kba-indicators"
+  suffix = "kba-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "kba-timings.rds"))

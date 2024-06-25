@@ -28,9 +28,7 @@ stats_traveltime <- function(
 }
 
 timings <- run_indicator(
-  country_codes = country_codes,
-  wdpa_src = wdpa_dsn,
-  layer = layer,
+  input = input,
   fetch_resources = get_traveltime,
   calc_stats = stats_traveltime,
   resource_cores = 10,
@@ -38,7 +36,8 @@ timings <- run_indicator(
   progress = progress,
   area_threshold = 500000,
   out_path = out_path,
-  suffix = "traveltime-indicators"
+  suffix = "traveltime-indicators",
+  overwrite = overwrite
 )
 
 saveRDS(timings, file.path(out_path, "traveltime-timings.rds"))
