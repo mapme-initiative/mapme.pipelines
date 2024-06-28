@@ -1,4 +1,4 @@
-source("000_setup.R")
+source("src/000_setup.R")
 
 baseurl <- "https://pp-import-production.s3-eu-west-1.amazonaws.com/WDPA_WDOECM_%s_Public.zip"
 
@@ -25,14 +25,18 @@ layer <- grep("poly", layers$name, value = TRUE)
 wdpa_dsn <- file.path(data_path, gsub("gdb", "parquet", basename(url)))
 
 if (!spds_exists(wdpa_dsn)) {
-  message("Fetching WDPA data...")
-  sf::gdal_utils("vectortranslate", source = url, destination = wdpa_dsn,
-                options = c(layer, "-progress", "-wrapdateline",
-                            "-datelineoffset", "180", "-makevalid",
-                            "-oo", "GEOMETRY_ENCODING=GEOARROW",
-                            "-oo", "ROW_GROUP_SIZE=10000",
-                            "-oo", "SORT_BY_BBOX=YES"),
-                quiet = FALSE)
+  withr::with_envvar(c("GDAL_NUM_THREADS" = ncores), code = {
+    message("Fetching WDPA data...")
+    sf::gdal_utils("vectortranslate", source = url, destination = wdpa_dsn,
+                   options = c(layer, "-progress", "-wrapdateline",
+                               "-datelineoffset", "180", "-makevalid",
+                               "-lco", "GEOMETRY_ENCODING=GEOARROW",
+                               "-lco", "ROW_GROUP_SIZE=10000",
+                               "-lco", "EDGES=SPHERE",
+                               "-lco", "WRITE_COVERING_BBOX=YES",
+                               "-lco", "SORT_BY_BBOX=YES"),
+                   quiet = FALSE)
+  })
 }
 
 layer <- gsub(".parquet", "", basename(wdpa_dsn))
