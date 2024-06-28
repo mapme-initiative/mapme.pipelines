@@ -7,3 +7,4 @@ default:
   by_region: false
   timeout: 600
   overwrite: false
+  wdpa_ver: "latest"

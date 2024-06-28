@@ -2,7 +2,6 @@ library(sf)
 library(terra)
 library(dplyr)
 library(purrr)
-library(config)
 library(future)
 library(progress)
 library(progressr)
@@ -21,6 +20,7 @@ out_path <- config$output_path
 progress <- config$progress
 by_region <- config$by_region
 overwrite <- config$overwrite
+wdpa_ver <- config$wdpa_ver
 
 # leave untouched from here on
 handlers("progress")
