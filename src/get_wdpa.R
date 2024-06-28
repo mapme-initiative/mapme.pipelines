@@ -28,11 +28,9 @@ if (!spds_exists(wdpa_dsn)) {
   withr::with_envvar(c("GDAL_NUM_THREADS" = ncores), code = {
     message("Fetching WDPA data...")
     sf::gdal_utils("vectortranslate", source = url, destination = wdpa_dsn,
-                   options = c(layer, "-progress", "-wrapdateline",
-                               "-datelineoffset", "180", "-makevalid",
-                               "-lco", "GEOMETRY_ENCODING=GEOARROW",
+                   options = c(layer, "-progress", "-makevalid",
+                               "-wrapdateline", "-datelineoffset", "180",
                                "-lco", "ROW_GROUP_SIZE=10000",
-                               "-lco", "EDGES=SPHERE",
                                "-lco", "WRITE_COVERING_BBOX=YES",
                                "-lco", "SORT_BY_BBOX=YES"),
                    quiet = FALSE)
