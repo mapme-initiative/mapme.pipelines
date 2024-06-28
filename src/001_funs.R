@@ -1,27 +1,31 @@
-order_parallel <- function(x, ncores = 4, bboxs = NULL, decreasing = TRUE) {
+order_parallel <- function(x, ncores = 4, areas = NULL, decreasing = TRUE) {
   if (nrow(x) == 0) return(NULL)
   stopifnot(is.numeric(ncores) || length(ncores) == 1)
-  stopifnot(is.null(bboxs) || is.numeric(bboxs))
-  if (is.null(bboxs)) {
-    bboxs <- sapply(1:nrow(x), function(i) st_area(st_as_sfc(st_bbox(x[i,]))))
+  stopifnot(is.null(areas) || is.numeric(areas))
+  if (is.null(areas)) {
+    areas <- lapply(st_geometry(x), function(y) st_area(st_as_sfc(st_bbox(y))))
+    areas <- do.call("c", areas)
   }
-  bboxs_ordered <- order(bboxs, decreasing = TRUE)
-  index <- rep(1:ncores, round(length(bboxs) / ncores))[1:length(bboxs)]
+  bboxs_ordered <- order(areas, decreasing = TRUE)
+  index <- rep(1:ncores, round(length(areas) / ncores))[1:length(areas)]
   index <- order(index, decreasing = decreasing)
   x[bboxs_ordered[index], ]
 }
 
-split_aoi <- function(x, areas, thres, ncores) {
+
+split_aoi <- function(x, areas, thres, ncores, decreasing = TRUE) {
 
   small <- large <- NULL
 
-  small <- x[areas <= thres, ]
-  large <- x[areas > thres, ]
+  x_small <- x[areas <= thres, ]
+  a_small <- areas[areas <= thres]
+  x_large <- x[areas > thres, ]
+  a_large <- areas[areas > thres]
 
-  small <- order_parallel(small, ncores = ncores[1])
-  large <- order_parallel(large, ncores = ncores[2])
+  x_small <- order_parallel(x_small, ncores[1], a_small, decreasing)
+  x_large <- order_parallel(x_large, ncores[2], a_large, decreasing)
 
-  list(small=small,large=large)
+  list(small=x_small,large=x_large)
 
 }
 
@@ -61,39 +65,36 @@ run_indicator <- function(
   if (file.exists(filename) && !overwrite) return(null_result)
 
   if (progress) {
-    print(Sys.time())
-    print(sprintf("Now processing %s", basename(input)))
+    message(Sys.time())
+    message(sprintf("Now processing %s", basename(input)))
   }
 
-  x <- read_sf(input, check_ring_dir = TRUE)
-
-  if (nrow(x) == 0) return(null_result)
-
-  x <- st_make_valid(x)
-  is_valid <- st_is_valid(x)
-  x_valid <- x[is_valid, ]
-
-  if (nrow(x_valid) == 0) return(null_result)
+  x <- st_read(input)
+  n <- nrow(x)
 
   if (progress) {
-    print(sprintf("Found %s assets...", nrow(x_valid)))
+    message(sprintf("Found %s assets...", n))
   }
 
-  bboxs <- purrr::map_dfr(1:nrow(x_valid), function(i) st_as_sf(st_as_sfc(st_bbox(x_valid[i, ]))))
-  bboxs <- st_as_sf(bboxs)
+  bboxs <- lapply(st_geometry(x), function(y) st_as_sfc(st_bbox(y)))
+  bboxs <- st_sf(do.call("c", bboxs), crs = st_crs(x))
   bbox_areas <- as.numeric(st_area(bboxs)) / 10000
 
-  # fetch resources
+  if (progress) {
+    message("Fetching resources...")
+  }
   plan(multicore, workers = min(ncores, resource_cores))
   res <- try(fetch_resources(bboxs, progress))
   plan(sequential)
 
   if (inherits(res, "try-error")) return(null_result)
+  rm(res)
 
   inds_small <- inds_large <- NULL
 
-  x_split <- split_aoi(x_valid, bbox_areas, area_threshold, ncores = c(ncores, 2))
+  x_split <- split_aoi(x, bbox_areas, area_threshold, ncores = c(ncores, 1))
   mapme_options(chunk_size = area_threshold)
+  rm(x)
 
   start <- Sys.time()
 
@@ -135,7 +136,7 @@ run_indicator <- function(
 
   diff <- end-start
   units(diff) <- "secs"
-  result <- data.frame(region = basename(input), n = nrow(x_valid), timing = diff)
+  result <- data.frame(region = basename(input), n = n, timing = diff)
   return(result)
 
 }
