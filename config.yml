@@ -7,4 +7,5 @@ default:
   by_region: false
   timeout: 600
   overwrite: false
+  batch_size: 10000
   wdpa_ver: "latest"

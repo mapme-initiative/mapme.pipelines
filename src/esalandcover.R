@@ -28,6 +28,7 @@ timings <- run_indicator(
   ncores = ncores,
   progress = progress,
   area_threshold = 75000,
+  batch_size = batch_size,
   out_path = out_path,
   suffix = "landcover-indicators",
   overwrite =  overwrite

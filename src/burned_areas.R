@@ -26,6 +26,7 @@ timings <- run_indicator(
   ncores = ncores,
   progress = progress,
   area_threshold = 500000,
+  batch_size = batch_size,
   out_path = out_path,
   suffix = "burned_area-indicators",
   overwrite = overwrite

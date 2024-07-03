@@ -30,6 +30,7 @@ timings <- run_indicator(
   ncores = ncores,
   progress = progress,
   area_threshold = 50000,
+  batch_size = batch_size,
   out_path = out_path,
   suffix = "hfp-indicators",
   overwrite = overwrite
