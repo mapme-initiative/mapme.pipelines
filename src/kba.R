@@ -38,6 +38,7 @@ timings <- run_indicator(
   ncores = ncores,
   progress = progress,
   area_threshold = 5000000,
+  batch_size = batch_size,
   out_path = out_path,
   suffix = "kba-indicators",
   overwrite = overwrite

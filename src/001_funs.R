@@ -36,6 +36,50 @@ make_filename <- function(input, out_path, suffix) {
 }
 
 
+.process <- function(
+    x,
+    ncores,
+    resource_cores,
+    area_threshold,
+    fetch_resources,
+    calc_stats,
+    progress) {
+
+  backend <- if(interactive()) multisession else multicore
+
+  bboxs <- lapply(st_geometry(x), function(y) st_as_sfc(st_bbox(y)))
+  bboxs <- st_sf(do.call("c", bboxs), crs = st_crs(x))
+  bbox_areas <- as.numeric(st_area(bboxs)) / 10000
+
+  plan(backend, workers = min(ncores, resource_cores))
+  res <- try(fetch_resources(bboxs, progress))
+  plan(sequential)
+
+  if (inherits(res, "try-error")) return(null_result)
+
+  inds_small <- inds_large <- NULL
+
+  x_split <- split_aoi(x, bbox_areas, area_threshold, ncores = c(ncores, 1))
+  mapme_options(chunk_size = area_threshold)
+
+  if(!is.null(x_split$small)){
+    if(nrow(x_split$small) > ncores * 2) {
+      plan(list(tweak(backend, workers = ncores), sequential))
+    }
+    inds_small <- calc_stats(x_split$small, progress = progress)
+    plan(sequential)
+  }
+
+  if(!is.null(x_split$large)){
+    plan(list(sequential, tweak(backend, workers = ncores)))
+    inds_large <- calc_stats(x_split$large, progress = progress)
+    plan(sequential)
+  }
+
+  rbind(inds_small, inds_large)
+}
+
+
 run_indicator <- function(
     input,
     fetch_resources,
@@ -44,6 +88,7 @@ run_indicator <- function(
     ncores = 10,
     progress = TRUE,
     area_threshold = 90000,
+    batch_size = 10000,
     out_path = ".",
     suffix = "",
     overwrite = FALSE) {
@@ -69,61 +114,46 @@ run_indicator <- function(
     message(sprintf("Now processing %s", basename(input)))
   }
 
-  x <- st_read(input)
-  n <- nrow(x)
+  info <- st_layers(input)
+  n_total <- info$features
+  layer <- info$name[1]
+  batches <- ceiling(n_total / batch_size)
 
   if (progress) {
-    message(sprintf("Found %s assets...", n))
+    message(sprintf("Found %s assets.", n_total))
+    message(sprintf("Processing in %s batches.", batches))
   }
-
-  bboxs <- lapply(st_geometry(x), function(y) st_as_sfc(st_bbox(y)))
-  bboxs <- st_sf(do.call("c", bboxs), crs = st_crs(x))
-  bbox_areas <- as.numeric(st_area(bboxs)) / 10000
-
-  if (progress) {
-    message("Fetching resources...")
-  }
-  plan(multicore, workers = min(ncores, resource_cores))
-  res <- try(fetch_resources(bboxs, progress))
-  plan(sequential)
-
-  if (inherits(res, "try-error")) return(null_result)
-  rm(res)
-
-  inds_small <- inds_large <- NULL
-
-  x_split <- split_aoi(x, bbox_areas, area_threshold, ncores = c(ncores, 1))
-  mapme_options(chunk_size = area_threshold)
-  rm(x)
 
   start <- Sys.time()
 
   if (progress) {
     print("Start time of processing:")
     print(start)
-    n_small <- ifelse(is.null(x_split$small), 0, nrow(x_split$small))
-    n_large <- ifelse(is.null(x_split$large), 0, nrow(x_split$large))
-    print(sprintf("Number of small assets: %s", n_small))
-    print(sprintf("Number of large assets: %s", n_large))
   }
 
-  if(!is.null(x_split$small)){
-    if(nrow(x_split$small) > ncores * 2) {
-      plan(list(tweak(multicore, workers = ncores), sequential))
+  inds <- purrr::map(seq_len(batches), function(i) {
+
+    if (progress) {
+      message(sprintf("Start of processing batch %s...", i))
     }
-    inds_small <- calc_stats(x_split$small, progress = TRUE)
-    plan(sequential)
-  }
 
-  if(!is.null(x_split$large)){
-    plan(list(sequential, tweak(multicore, workers = ncores)))
-    inds_large <- calc_stats(x_split$large, progress = TRUE)
-    plan(sequential)
-  }
+    offset <- max(0, ((i * batch_size) - batch_size) - 1)
 
-  inds <- rbind(inds_small, inds_large)
+    query <- "select * from %s limit %s offset %s"
+    query <- sprintf(query, layer, batch_size, offset)
+    x <- read_sf(input, query = query)
 
-  write_portfolio(inds, filename, quiet = TRUE, overwrite = overwrite)
+    .process(
+      x,
+      ncores = ncores,
+      resource_cores = resource_cores,
+      area_threshold = area_threshold,
+      fetch_resources = fetch_resources,
+      calc_stats = calc_stats,
+      progress = progress)
+  })
+
+  inds <- st_as_sf(purrr::list_rbind(inds))
 
   end <- Sys.time()
 
@@ -134,9 +164,10 @@ run_indicator <- function(
     print(end-start)
   }
 
+  write_portfolio(inds, filename, quiet = TRUE, overwrite = overwrite)
+
   diff <- end-start
   units(diff) <- "secs"
-  result <- data.frame(region = basename(input), n = n, timing = diff)
+  result <- data.frame(region = basename(input), n = n_total, timing = diff)
   return(result)
-
 }

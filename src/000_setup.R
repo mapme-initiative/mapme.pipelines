@@ -20,6 +20,7 @@ out_path <- config$output_path
 progress <- config$progress
 by_region <- config$by_region
 overwrite <- config$overwrite
+batch_size <- config$batch_size
 wdpa_ver <- config$wdpa_ver
 
 # leave untouched from here on

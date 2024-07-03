@@ -28,7 +28,8 @@ timings <- run_indicator(
   resource_cores = 10,
   ncores = ncores,
   progress = progress,
-  area_threshold = 75000,
+  area_threshold = 50000,
+  batch_size = batch_size,
   out_path = out_path,
   suffix = "gfw-indicators",
   overwrite =  overwrite
