@@ -25,16 +25,27 @@ layer <- grep("poly", layers$name, value = TRUE)
 wdpa_dsn <- file.path(data_path, gsub("gdb", "parquet", basename(url)))
 
 if (!spds_exists(wdpa_dsn)) {
-  withr::with_envvar(c("GDAL_NUM_THREADS" = ncores), code = {
-    message("Fetching WDPA data...")
-    sf::gdal_utils("vectortranslate", source = url, destination = wdpa_dsn,
-                   options = c(layer, "-progress", "-makevalid",
-                               "-wrapdateline", "-datelineoffset", "180",
-                               "-lco", "ROW_GROUP_SIZE=10000",
-                               "-lco", "WRITE_COVERING_BBOX=YES",
-                               "-lco", "SORT_BY_BBOX=YES"),
-                   quiet = FALSE)
-  })
-}
+  message("Fetching WDPA data...")
+  lcos <- c(
+    "-lco", "ROW_GROUP_SIZE=10000",
+    "-lco", "WRITE_COVERING_BBOX=YES",
+    "-lco", "SORT_BY_BBOX=YES"
+  )
+  sf::gdal_utils("vectortranslate", source = url, destination = wdpa_dsn,
+                 options = c(layer, "-progress", "-makevalid",
+                             "-wrapdateline", "-datelineoffset", "180",
+                             lcos),
+                 quiet = FALSE)
+  data <- read_sf(wdpa_dsn, check_ring_dir = TRUE)
+  is_valid <- st_is_valid(data)
+  invalid <- which(!is_valid)
+  data[invalid, ] <- st_make_valid(data[invalid, ])
+  invalid <- which(!st_is_valid(data[invalid, ]))
 
-layer <- gsub(".parquet", "", basename(wdpa_dsn))
+  message(sprintf("From total %s geometries, %s were invalid.\nCould not repair %s geometries.",
+                  nrow(data), sum(!is_valid), length(invalid)))
+
+  if (length(invalid) > 0 ) data <- data[-invalid, ]
+
+  st_write(data, wdpa_dsn, layer_options = lcos[c(FALSE, TRUE)], driver = "Parquet")
+}
