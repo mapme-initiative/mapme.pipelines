@@ -1,0 +1,74 @@
+title: MAPME Pipelines Configuration Schema
+required:
+ - input
+ - output
+ - datadir
+ - resources
+ - indicators
+additionalProperties: false
+properties:
+  input:
+    type: string
+  output:
+    type: string
+  datadir:
+    type: string
+    default: ./data
+  batchsize:
+    type: integer
+    default: 10000
+  options:
+    $ref: "#/$defs/options"
+
+  resources:
+    type: object
+    minItems: 1
+    additionalProperties: false
+    patternProperties:
+      ^get_:
+        type: object
+        properties:
+          args:
+            type: object
+          options:
+            $ref: "#/$defs/options"
+        additionalProperties: false
+
+  indicators:
+    type: object
+    minItems: 1
+    additionalProperties: false
+    patternProperties:
+      ^calc_:
+        type: object
+        properties:
+          args:
+            type: object
+          options:
+            $ref: "#/$defs/options"
+        additionalProperties: false
+
+$defs:
+ options:
+    type: object
+    additionalProperties: false
+    properties:
+      overwrite:
+        type: boolean
+        default: false
+      progress:
+        type: boolean
+        default: false
+      maxcores:
+        type: integer
+        exclusiveMinimum: 0
+        default: 1
+      chunksize:
+        type: number
+        minimum: 1
+      backend:
+        type: string
+        enum:
+          - multisession
+          - multicore
+

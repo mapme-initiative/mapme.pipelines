@@ -1,0 +1,29 @@
+Package: mapme.pipelines
+Title: Run MAPME Piplines configured in YAML
+Version: 0.0.1
+Authors@R: 
+    person("Darius A.", "Görgen", , "info@dariusgoergen.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0008-5503-7704"))
+Description: Run MAPME Pipelines that are configured via a simple YAML file with
+  fine-control of a number of options per resource and indicator function.
+  The YAML file is automatically checked for proper formating before any calculations
+  are run. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports: 
+    dplyr,
+    future,
+    jsonlite,
+    jsonvalidate,
+    logger,
+    mapme.biodiversity (>= 0.8.0),
+    progressr,
+    purrr,
+    sf,
+    tibble,
+    yaml
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

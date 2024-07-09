@@ -1,35 +1,57 @@
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/mapme-initiative/wdpa-pipelines/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mapme-initiative/wdpa-pipelines/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# wdpa-pipelines
+# mapme.pipelines
 
 The codes in this repository are currently WIP. The goal of this project
 is to conduct large-scale analysis of globally distributed portfolios
 based on the World Database on Protected Areas (WDPA) with `{mapme.biodiversity}`.
 
-To make this project work on your local machine, first open up the setup
-file and adjust according to your requirements.
+To install the package run:
 
 ```r
-file.edit("src/000_setup")
+remotes::install_github("mapme-initiative/mapme.pipelines")
 ```
 
-You can build a docker image for the project via:
+The package exports a single function called `run_config()`
+which you should point towards a `YAML` file. Suppose
+you wanted to run the `calc_treecover_area()` indicator
+for a GeoPackage called `my-polygons.gpkg`, the yaml 
+should look something like this:
 
-```bash
-$ docker build -t wdpa-pipelines:latest .
+```yaml
+input: ./my-polygons.gpkg
+output: ./my-polygpns-treecover.gpkg
+datadir: ./data
+options:
+  maxcores: 4
+  progress: true
+  chunksize: 50000
+resources:
+  get_gfw_treecover:
+    args:
+      version: GFC-2023-v1.11
+  get_gfw_lossyear:
+    args: 
+      version: GFC-2023-v1.11
+indicators:
+  calc_treecover_area:
+    args: 
+      min_cover: 30
+      min_size: 1
 ```
 
-Then, to calculate e.g. forest cover and emission indicators you can issue
-the following command in a shell on a Unix system from the project's root 
-directory:
+When putting above content in a file called `config.yaml`,
+to run the pipeline, we now have to run:
 
-```console
-$ docker run -v .:/home/rstudio wdpa-pipelines:latest Rscript src/gfw.R
+```r
+library(mapme.biodiversity)
+library(mapme.pipelines)
+run_config("./config.yaml")
 ```
 
-Note, this will map the project directory into the docker container. In 
-case your input/output directories are elsewhere on your machine make sure
-to map those locations correctly to the container, too.
+See `help(run_config)` for additional details how to customize
+your pipeline.
