@@ -40,13 +40,13 @@ run_config <- function(config) {
 }
 
 run <- function(
-  input = NULL,
-  output = NULL,
-  datadir = "./data",
-  options = setup_opts(),
-  batchsize = 10000,
-  resources = NULL,
-  indicators = NULL) {
+    input = NULL,
+    output = NULL,
+    datadir = "./data",
+    options = setup_opts(),
+    batchsize = 10000,
+    resources = NULL,
+    indicators = NULL) {
 
   stopifnot(spds_exists(input))
   dir.create(datadir, showWarnings = FALSE)
@@ -83,28 +83,28 @@ run <- function(
         logger::log_info(sprintf("Start processing of batch %s ...", batch_index))
       }
 
-    run_batch(
-      input,
-      batch_index,
-      batchsize,
-      resource_funs,
-      indicator_funs,
-      options$progress)
+      run_batch(
+        input,
+        batch_index,
+        batchsize,
+        resource_funs,
+        indicator_funs,
+        options$progress)
 
-  })
+    })
 
   merge_batches(batch_files, output)
-  }
+}
 
 
 #' @importFrom tibble as_tibble
 run_batch <- function(
-  input,
-  batch_index,
-  batchsize,
-  resource_funs,
-  indicator_funs,
-  progress) {
+    input,
+    batch_index,
+    batchsize,
+    resource_funs,
+    indicator_funs,
+    progress) {
 
   batch <- read_batch(input, batch_index, batchsize)
   bboxs <- get_bboxs(batch)
@@ -120,7 +120,7 @@ run_batch <- function(
     logger::log_info("Calculating indicators...")
   }
 
-  batch_inds <- purrr::imap(indicator_funs, call_indicator, batch = batch, areas = bboxs[["area"]])
+  batch_inds <- purrr::imap(indicator_funs, call_indicator, batch = batch)
   batch_inds <- purrr::reduce(batch_inds, dplyr::left_join, by = ".mapmeid")
   is_null <- sapply(batch_inds, function(x) all(is.null(unlist(x))))
 
@@ -151,10 +151,10 @@ call_resource <- function(f, name, batch) {
     get_resources(batch, fun)
   }, enable = opts$progress)
   plan(sequential)
-  }
+}
 
 #' @importFrom future plan tweak sequential
-call_indicator <- function(f, name, batch, areas) {
+call_indicator <- function(f, name, batch) {
   fun <- f$fun
   opts <- f$opts
 
@@ -162,45 +162,21 @@ call_indicator <- function(f, name, batch, areas) {
     logger::log_info(sprintf("Now processing indicator '%s'...", name))
   }
 
-  dsn <- tempfile(fileext = ".gpkg")
-  inds_small <- inds_large <- NULL
-
-  batch_split <- split_aoi(batch, areas, opts$chunksize, ncores = c(opts$maxcores, 1))
   mapme_options(chunk_size = opts$chunksize)
 
-  if (opts$progress) {
-    logger::log_info("Start processing of assets below chunksize...")
-  }
-
   progressr::with_progress({
-    if(!is.null(batch_split$small)){
-      if(nrow(batch_split$small) > opts$maxcores * 2 && opts$maxcores > 1) {
-        plan(list(tweak(opts$backend, workers = opts$maxcores), sequential))
-      }
-      inds_small <- calc_indicators(batch_split$small, fun)
-      plan(sequential)
+    if(nrow(batch) > opts$maxcores * 2 && opts$maxcores > 1) {
+      plan(opts$backend, workers = opts$maxcores)
     }
+    inds <- calc_indicators(batch, fun)
+    plan(sequential)
   }, enable = opts$progress)
 
-  if (opts$progress) {
-    logger::log_info("Start processing of assets above chunksize...")
-  }
-
-  progressr::with_progress({
-    if(!is.null(batch_split$large)){
-      if(opts$maxcores > 1) {
-        plan(list(sequential, tweak(opts$backend, workers = opts$maxcores)))
-      }
-      inds_large <- calc_indicators(batch_split$large, fun)
-      plan(sequential)
-      }
-  }, enable = opts$progress)
-
-  inds <- rbind(inds_small, inds_large)
+  terra::tmpFiles(current = TRUE, orphan = TRUE, old = TRUE, remove = TRUE)
   inds <- sf::st_drop_geometry(inds)
   target_cols <- sapply(inds, is.list)
   # TODO: use assetid when mapme.biodiversity
   # does not overwrite unique ids
   target_cols <- c(".mapmeid", names(target_cols)[target_cols])
   inds[ ,target_cols]
-  }
+}

@@ -22,6 +22,7 @@ Imports:
     progressr,
     purrr,
     sf,
+    terra,
     tibble,
     yaml
 Suggests: 
