@@ -65,7 +65,7 @@ read_config <- function(path = character(0)) {
 
 setup_with_opts <- function(f, name, options) {
   args <- f$args
-  opts <- f$opts
+  opts <- f$options
   f <- setup(name, args)
   opts <- override_opts(opts, options)
   list(fun = f, opts = opts)
