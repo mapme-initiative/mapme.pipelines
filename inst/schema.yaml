@@ -64,8 +64,10 @@ $defs:
         exclusiveMinimum: 0
         default: 1
       chunksize:
-        type: number
-        minimum: 1
+        oneOf:
+          - type: number
+            minimum: 1
+          - type: "null"
       backend:
         type: string
         enum:

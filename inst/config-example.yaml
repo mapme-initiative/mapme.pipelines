@@ -6,16 +6,17 @@ options:
   overwrite: false
   maxcores: 1
   progress: true
+  chunksize: NULL
 resources:
   get_gfw_treecover:
     args:
       version: GFC-2023-v1.11
   get_gfw_lossyear:
-    args: 
+    args:
       version: GFC-2023-v1.11
 indicators:
   calc_treecover_area:
-    args: 
+    args:
       min_cover: 30
       min_size: 1
     options:

@@ -40,10 +40,10 @@ validate <- function(data,
   schema = system.file("schema.yaml", package = "mapme.pipelines"),
   ...) {
   s <- yaml::read_yaml(schema)
-  s <- jsonlite::toJSON(s, auto_unbox = TRUE)
+  s <- jsonlite::toJSON(s, auto_unbox = TRUE, null = "null")
 
   d <- yaml::read_yaml(data)
-  d <- jsonlite::toJSON(d, auto_unbox = TRUE)
+  d <- jsonlite::toJSON(d, auto_unbox = TRUE, null = "null")
 
   jsonvalidate::json_validate(d, s, ...)
 }
