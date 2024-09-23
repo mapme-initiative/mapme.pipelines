@@ -12,16 +12,16 @@ run_config(config)
 \description{
 Analysis pipelines are configured using a YAML configuration file.
 Its contents will be checked for validity before running any calculations.
-Resources/indicators top-level objects are their respective functionc calls
+Resources/indicators top-level objects are their respective function calls
 (e.g. \verb{get_*}/\verb{calc_*}) with optional sub-objects \code{args} (defining the
 respective function's arguments) and \code{options} (see Details below).
 }
 \details{
 The required objects are:
 \itemize{
-\item input: A charachter pointing to a existing GDAL-readable vector data source
-\item output: A charachter pointing to a non-existing GPGK (unless the overwrite option is set to TRUE)
-\item datadir: A charachter pointing to a GDAL-writable path prefix
+\item input: A character pointing to a existing GDAL-readable vector data source
+\item output: A character pointing to a non-existing GPGK (unless the overwrite option is set to TRUE)
+\item datadir: A character pointing to a GDAL-writable path prefix
 \item resources: At least a single resource \verb{get_*()} function has to be defined with
 possible \code{args} and \code{options} objects
 \item indicators: At least a single indicator \verb{calc_*()} function has to be defined with
@@ -30,7 +30,7 @@ possible \code{args} and \code{options} objects
 
 Optional objects are:
 \itemize{
-\item batchsize: Integer value indicating the batchsize with wich \code{input} is sliced
+\item batchsize: Integer value indicating the batchsize with which \code{input} is sliced
 into equally sized batches for processing (default: 10,000)
 \item options: An options object set as global options. Each resource/indicator
 object can also be supplied with an \code{options} object to have finer control

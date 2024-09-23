@@ -2,21 +2,21 @@
 #'
 #' Analysis pipelines are configured using a YAML configuration file.
 #' Its contents will be checked for validity before running any calculations.
-#' Resources/indicators top-level objects are their respective functionc calls
+#' Resources/indicators top-level objects are their respective function calls
 #' (e.g. `get_*`/`calc_*`) with optional sub-objects `args` (defining the
 #' respective function's arguments) and `options` (see Details below).
 #'
 #' The required objects are:
-#' - input: A charachter pointing to a existing GDAL-readable vector data source
-#' - output: A charachter pointing to a non-existing GPGK (unless the overwrite option is set to TRUE)
-#' - datadir: A charachter pointing to a GDAL-writable path prefix
+#' - input: A character pointing to a existing GDAL-readable vector data source
+#' - output: A character pointing to a non-existing GPGK (unless the overwrite option is set to TRUE)
+#' - datadir: A character pointing to a GDAL-writable path prefix
 #' - resources: At least a single resource `get_*()` function has to be defined with
 #'   possible `args` and `options` objects
 #' - indicators: At least a single indicator `calc_*()` function has to be defined with
 #'   possible `args` and `options` objects
 #'
 #' Optional objects are:
-#' - batchsize: Integer value indicating the batchsize with wich `input` is sliced
+#' - batchsize: Integer value indicating the batchsize with which `input` is sliced
 #'   into equally sized batches for processing (default: 10,000)
 #' - options: An options object set as global options. Each resource/indicator
 #'   object can also be supplied with an `options` object to have finer control
