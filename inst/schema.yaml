@@ -26,13 +26,15 @@ properties:
     additionalProperties: false
     patternProperties:
       ^get_:
-        type: object
-        properties:
-          args:
-            type: object
-          options:
-            $ref: "#/$defs/options"
-        additionalProperties: false
+        oneOf:
+          - type: object
+            properties:
+              args:
+                type: object
+              options:
+                $ref: "#/$defs/options"
+            additionalProperties: false
+          - type: "null"
 
   indicators:
     type: object
@@ -40,13 +42,15 @@ properties:
     additionalProperties: false
     patternProperties:
       ^calc_:
-        type: object
-        properties:
-          args:
-            type: object
-          options:
-            $ref: "#/$defs/options"
-        additionalProperties: false
+        oneOf:
+          - type: object
+            properties:
+              args:
+                type: object
+              options:
+                $ref: "#/$defs/options"
+            additionalProperties: false
+          - type: "null"
 
 $defs:
  options:
