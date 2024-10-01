@@ -104,7 +104,6 @@ setup_opts <- function(opts = NULL) {
     timeout = 600,
     maxcores = 1,
     chunksize = 100000,
-    batchsize = 10000,
     backend = if(interactive() | Sys.info()[["sysname"]] == "Windows") future::multisession else future::multicore
   )
   override_opts(opts, defaults)
