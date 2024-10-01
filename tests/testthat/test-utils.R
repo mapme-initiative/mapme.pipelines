@@ -52,7 +52,7 @@ test_that("read_batch works", {
 test_that("setup_opts works", {
   expect_silent(opts <- setup_opts(opts = NULL))
   nopts <- c("overwrite", "progress", "timeout", "maxcores",
-  "chunksize", "batchsize", "backend")
+  "chunksize", "backend")
   expect_true(identical(names(opts), nopts))
   opts2 <- setup_opts(opts = list(maxcores = 5))
   expect_equal(opts[["maxcores"]], 1)
