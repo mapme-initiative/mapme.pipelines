@@ -1,4 +1,3 @@
-
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R-CMD-check](https://github.com/mapme-initiative/wdpa-pipelines/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mapme-initiative/wdpa-pipelines/actions/workflows/R-CMD-check.yaml)
@@ -8,7 +7,12 @@
 
 The codes in this repository are currently WIP. The goal of this project
 is to conduct large-scale analysis of globally distributed portfolios
-based on the World Database on Protected Areas (WDPA) with `{mapme.biodiversity}`.
+based on reproducible pipelines powered by `{mapme.biodiversity}`.
+
+To reduce the production of boilerplate code when using conducting
+analysis with `mapme.biodiversity` one can instead produce a high-level
+YAML file indicating input/output files, options as well as which
+resources to fetch and indicators to calculate. 
 
 To install the package run:
 
@@ -24,7 +28,7 @@ should look something like this:
 
 ```yaml
 input: ./my-polygons.gpkg
-output: ./my-polygpns-treecover.gpkg
+output: ./my-polygons-treecover.gpkg
 datadir: ./data
 options:
   maxcores: 4
@@ -44,8 +48,8 @@ indicators:
       min_size: 1
 ```
 
-When putting above content in a file called `config.yaml`,
-to run the pipeline, we now have to run:
+Putting the content above in a file called `config.yaml`,
+all we have to do to run the configured pipeline is:
 
 ```r
 library(mapme.biodiversity)
